@@ -1,36 +1,26 @@
 .chat-main
   .group-info
     .current-group
-      test
-      .member-list
-        %p Member : 
-        %ul
-          %li masa
+      = @group.name
+      %ul.member-list
+        Member :
+        %li.name-list
+          - @group.users.each do |name|
+            %li= name.name
     .edit-btn 
-      = link_to '#', class: "edit-icon" do
+      = link_to edit_group_path(current_user) do
         Edit
   .message-field
-    .message-box
-      .message-info 
-        .message-info__user-name masa
-        .message-info__date 2019/11/20(Wed) 17:43:01     
-      .message
-        .message__content おはよう!
-    .message-box
-      .message-info
-        .message-info__user-name masa
-        .message-info__date 2019/11/20(Wed) 17:43:34
-      .message
-        .message__content 今日は夜から雨
+    = render @messages
   .footer
-    %form.form-contents
-      .form
-        %input.form__text{"type": "text", "placeholder": "type a message"}
-        %label.form__input-image
-          = icon('far', 'image')
-          %input{type: "file", class: "image-file"}
-        %input.form__submit{"type": "submit", "value": "Send"}
-
+    = form_with model: [@group, @message], html: {class: "form"}, local: true do |f|
+      .form-contents
+        .form
+          = f.text_field :content, class: 'form__input-content', placeholder: 'type a message'
+          = f.label :image, class: 'form__input-image' do
+            = icon('far', 'image')
+            = f.file_field :image, class: 'Hidden'
+          = f.submit 'Send', class: 'form__submit'
       
     
 
